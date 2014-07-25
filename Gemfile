@@ -1,0 +1,8 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem 'sinatra'
+gem 'thin'
+gem 'faraday'
+gem 'celluloid'
+gem 'hipchat'
