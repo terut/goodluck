@@ -1,4 +1,5 @@
 require 'json'
+require 'payload/base'
 require 'payload/push'
 require 'payload/deployment'
 module Goodluck
@@ -11,6 +12,8 @@ module Goodluck
           Push.new(delivery_id, payload)
         when 'deployment'
           Deployment.new(delivery_id, payload)
+        when 'ping'
+          NullPayload.new(delivery_id, payload)
         else
           raise NotSupportedPayload, "Payload of #{event} event is not supported."
         end

@@ -46,5 +46,13 @@ module Goodluck
         raise NotImplementedError, "You must implement #{self.class}##{__method__}"
       end
     end
+
+    class NullPayload < Base
+      attr_accessor :ref, :repo_with_owner, :app_url, :provider, :environment, :extension
+      private
+      def auto_deploy
+        false
+      end
+    end
   end
 end
