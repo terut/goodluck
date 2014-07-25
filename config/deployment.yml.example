@@ -1,0 +1,16 @@
+# payload is extended data
+terut/goodluck:
+  feature/example1:
+    auto_deploy: true
+    url: "https://goodluck.example.com"
+    provider: "heroku"
+    extension_payload:
+      app_name: "goodluck"
+      environment: "staging"
+  feature/example2:
+    auto_deploy: true
+    url: "https://goodluck.example.com"
+    provider: "heroku"
+    extension_payload:
+      app_name: "goodluck"
+      environment: "staging"
