@@ -6,7 +6,9 @@ module Goodluck
 
   class Server < Sinatra::Base
     post '/events' do
-      if valid_events.include?(event) && valid_request?
+      return status 404 unless valid_request?
+
+      if valid_events.include?(event)
         request.body.rewind
         data = request.body.read
 
@@ -19,7 +21,6 @@ module Goodluck
 
     private
     def valid_request?
-      return true
       ENV['GOODLUCK_TOKEN'] == params[:token]
     end
 
