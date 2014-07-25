@@ -5,6 +5,10 @@ require 'receiver'
 module Goodluck
 
   class Server < Sinatra::Base
+    get '/' do
+      redirect 'https://github.com/terut/goodluck'
+    end
+
     post '/events' do
       return status 404 unless valid_request?
 
