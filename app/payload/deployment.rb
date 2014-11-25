@@ -5,12 +5,12 @@ module Goodluck
       attr_accessor :ref, :repo_with_owner, :provider, :app_url, :environment, :extension
       def initialize(delivery_id, payload)
         super
-        @ref = payload['ref']
-        @repo_with_owner = payload['name']
-        @environment = payload['environment']
-        @app_url = payload['payload']['url']
-        @provider = payload['payload']['provider']
-        @extension = payload['payload']['extension_payload']
+        @ref = payload['deployment']['ref']
+        @repo_with_owner = payload['repository']['full_name']
+        @environment = payload['deployment']['environment']
+        @app_url = payload['deployment']['payload']['url']
+        @provider = payload['deployment']['payload']['provider']
+        @extension = payload['deployment']['payload']['extension_payload']
       end
 
       private
