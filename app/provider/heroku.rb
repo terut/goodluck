@@ -14,9 +14,9 @@ module Goodluck
       
       def initialize(payload)
         super  
-        @notifier = HipChatNotifier.new(payload.repo_with_owner,
-                                     payload.app_url,
-                                     payload.environment)
+        @notifier = Notifier.build(payload.repo_with_owner,
+                                   payload.app_url,
+                                   payload.environment)
         @app_name = payload.extension['app_name']
       end
 

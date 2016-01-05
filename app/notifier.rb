@@ -1,7 +1,20 @@
 require 'hipchat'
+require 'faraday'
+
 module Goodluck
   class Notifier
     attr_accessor :repo, :url, :environment
+
+    def self.build(repo, url, environment)
+      case ENV["NOTIFIER"]
+      when "slack"
+        SlackNotifier.new(repo, url, environment)
+      when "hipchat"
+        HipChatNotifier.new(repo, url, environment)
+      else
+        NullNotifier.new(repo, url, environment)
+      end
+    end
 
     def initialize(repo, url, environment)
       @repo = repo 
@@ -64,6 +77,76 @@ module Goodluck
 
     def client
       @client ||= HipChat::Client.new(token, api_version: 'v1')
+    end
+  end
+
+  class SlackNotifier < Notifier
+    attr_accessor :hook_url, :channel, :default_payload
+
+    def initialize(repo, url, environment)
+      super
+      @hook_url = ENV['SLACK_HOOK_URL']
+      @channel = ENV['SLACK_CHANNEL']
+      @default_payload = {
+        channel: channel,
+        username: "goodluck",
+        icon_emoji: ":angel:"
+      }
+    end
+
+    def pending
+      payload = {
+        text: "Deploy process started.",
+        attachments: [
+          {
+            color: "warning",
+            title: "Deploy: #{repo}",
+            text: "Shipping to #{environment}.",
+          }
+        ]
+      }
+      notify(default_payload.merge(payload))
+    end
+
+    def success
+      payload = {
+        text: "Deploy process finished.",
+        attachments: [
+          {
+            color: "good",
+            title: "Deploy: #{repo}",
+            text: "Shipped successfully to #{environment}.",
+            fields: [
+              {
+                title: "URL",
+                value: url,
+                short: true
+              }
+            ]
+          }
+        ]
+      }
+      notify(default_payload.merge(payload))
+    end
+
+    def failure
+      payload = {
+        text: "Deploy process stopped.",
+        attachments: [
+          {
+            color: "danger",
+            title: "Deploy: #{repo}",
+            text: "What's the hell. Something has gone wrong with #{environment}.",
+          }
+        ]
+      }
+      notify(default_payload.merge(payload))
+    end
+
+    private
+
+    def notify(payload)
+      Faraday.post hook_url, { payload: payload.to_json }
     end
   end
 
