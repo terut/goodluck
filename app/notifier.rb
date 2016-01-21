@@ -96,11 +96,11 @@ module Goodluck
 
     def pending
       payload = {
-        text: "Deploy process started.",
+        text: "Deployment process started.",
         attachments: [
           {
             color: "warning",
-            title: "Deploy: #{repo}",
+            title: "#{environment.capitalize}: Deploy #{repo}",
             text: "Shipping to #{environment}.",
           }
         ]
@@ -110,11 +110,11 @@ module Goodluck
 
     def success
       payload = {
-        text: "Deploy process finished.",
+        text: "Deployment process finished.",
         attachments: [
           {
             color: "good",
-            title: "Deploy: #{repo}",
+            title: "#{environment.capitalize}: Deploy #{repo}",
             text: "Shipped successfully to #{environment}.",
             fields: [
               {
@@ -131,11 +131,11 @@ module Goodluck
 
     def failure
       payload = {
-        text: "Deploy process stopped.",
+        text: "Deployment process stopped.",
         attachments: [
           {
             color: "danger",
-            title: "Deploy: #{repo}",
+            title: "#{environment.capitalize}: Deploy #{repo}",
             text: "What's the hell. Something has gone wrong with #{environment}.",
           }
         ]
